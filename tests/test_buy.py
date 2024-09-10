@@ -1,19 +1,9 @@
 import pytest
 from site_selectors.site_selectors import Selectors
 from utils import wait
-from playwright.sync_api import Page
-
-@pytest.fixture(scope="function")
-def page_context(playwright):
-    # Выбираем для теста, как самый популярный браузер, chromium и делаем его видимым
-    browser = playwright.chromium.launch(headless=False)
-    context = browser.new_context()
-    page = context.new_page()
-    yield page
-    context.close()
 
 @pytest.mark.parametrize("delay", [2000])  # Параметризируем задержку
-def test_purchase(page_context: Page, delay: int):
+def test_purchase(page_context, delay: int):
     page = page_context
 
     # Авторизация

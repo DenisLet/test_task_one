@@ -1,9 +1,11 @@
 import pytest
-from playwright.sync_api import Playwright
+from playwright.sync_api import Page
 
-@pytest.fixture(scope="session")
-def playwright() -> Playwright:
-    # Запуск Playwright (синхронно)
-    from playwright.sync_api import sync_playwright
-    with sync_playwright() as p:
-        yield p
+@pytest.fixture(scope="function")
+def page_context(playwright) -> Page:
+    # Выбираем для теста браузер Chromium и делаем его видимым
+    browser = playwright.chromium.launch(headless=False)
+    context = browser.new_context()
+    page = context.new_page()
+    yield page
+    context.close()
